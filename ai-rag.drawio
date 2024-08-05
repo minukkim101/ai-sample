@@ -1,0 +1,43 @@
+<mxfile host="app.diagrams.net" modified="2024-08-05T14:34:22.688Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36" etag="s408XH6X3eRyLIjs7mTF" version="24.5.4" type="github">
+  <diagram name="페이지-1" id="BOCwk33eexY4AJCNRdpS">
+    <mxGraphModel dx="885" dy="1194" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="dV636WrK0z-F1cWp6RVt-1" value="VectorDB" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="660" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="dV636WrK0z-F1cWp6RVt-2" value="Embedded Model" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="630" y="500" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="dV636WrK0z-F1cWp6RVt-3" value="PDF" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="340" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="dV636WrK0z-F1cWp6RVt-5" value="(1) 파일 전달" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;endArrow=none;endFill=0;" edge="1" parent="1" source="dV636WrK0z-F1cWp6RVt-4" target="dV636WrK0z-F1cWp6RVt-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dV636WrK0z-F1cWp6RVt-6" value="(2) 일정한 크기로 텍스트 Chunking 후 Vector로 변환 요청" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.958;exitY=0.358;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="dV636WrK0z-F1cWp6RVt-4">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="630" y="531" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dV636WrK0z-F1cWp6RVt-7" value="(4) Vector 저장" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="dV636WrK0z-F1cWp6RVt-4" target="dV636WrK0z-F1cWp6RVt-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="170" y="590" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dV636WrK0z-F1cWp6RVt-4" value="Lambda" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="500" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="dV636WrK0z-F1cWp6RVt-9" value="(3) Vector 전달" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.937;entryY=0.705;entryDx=0;entryDy=0;entryPerimeter=0;exitX=-0.005;exitY=0.727;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="dV636WrK0z-F1cWp6RVt-2" target="dV636WrK0z-F1cWp6RVt-4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dV636WrK0z-F1cWp6RVt-10" value="&lt;h2&gt;RAG 서버 구축 과정&lt;/h2&gt;&lt;div&gt;&lt;li&gt;&lt;strong&gt;PDF 파일 읽기&lt;/strong&gt;: PDF 파일에서 텍스트를 추출합니다.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;텍스트 Chunking&lt;/strong&gt;: 추출한 텍스트를 일정한 크기의 청크로 나눕니다.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;텍스트 임베딩&lt;/strong&gt;: BERT, GPT-3 등의 임베딩 모델을 사용하여 텍스트 청크를 벡터로 변환합니다.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;벡터 데이터베이스에 저장&lt;/strong&gt;: 변환된 벡터를 FAISS, Milvus, Pinecone 등의 벡터 데이터베이스에 저장합니다.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;RAG 서버 구축&lt;/strong&gt;:&lt;ul&gt;&lt;li&gt;&lt;strong&gt;검색 모듈&lt;/strong&gt;: 질문을 벡터로 변환하고, 벡터 데이터베이스에서 유사한 벡터를 검색합니다.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;생성 모듈&lt;/strong&gt;: 검색된 벡터(문서 청크)를 사용하여 질문에 대한 응답을 생성합니다.&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/div&gt;" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="160" y="800" width="570" height="190" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
