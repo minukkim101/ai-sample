@@ -1,29 +1,64 @@
+from langchain_core.runnables.history import RunnableWithMessageHistory
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_community.chat_message_histories import StreamlitChatMessageHistory
+from langchain.chat_models.bedrock import BedrockChat
+# from langchain.chat_models.anthropic import ChatAnthropic
 import streamlit as st
-from openai import OpenAI
 
-with st.sidebar:
-    openai_api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
-    "[Get an OpenAI API key](https://platform.openai.com/account/api-keys)"
-    "[View the source code](https://github.com/streamlit/llm-examples/blob/main/Chatbot.py)"
-    "[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/streamlit/llm-examples?quickstart=1)"
+from dotenv import load_dotenv
 
-st.title("💬 Chatbot")
 
-if "messages" not in st.session_state:
-    st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}]
+# Reference: https://python.langchain.com/docs/integrations/memory/streamlit_chat_message_history
+st.title("📖 StreamlitChatMessageHistory")
 
-for msg in st.session_state.messages:
-    st.chat_message(msg["role"]).write(msg["content"])
+model_id = 'anthropic.claude-v2'
+# Load AWS Profile/credentials from .env
+load_dotenv()
+llm = BedrockChat(
+    model_id=model_id,
+    streaming=True
+)
+
+msgs = StreamlitChatMessageHistory(key='langchain_messages')
+if len(msgs.messages) == 0:
+    msgs.add_ai_message("How can I help you?")
+
+view_messages = st.expander("View the message contents in session state")
+
+prompt = ChatPromptTemplate.from_messages(
+    [
+        ("system", "You are an AI chatbot having a conversation with a human."),
+        MessagesPlaceholder(variable_name="history"),
+        ("human", "{question}"),
+    ]
+)
+
+chain = prompt | llm
+chain_with_history = RunnableWithMessageHistory(
+    chain,
+    lambda session_id: msgs,
+    input_messages_key="question",
+    history_messages_key="history",
+)
+
+for msg in msgs.messages:
+    st.chat_message(msg.type).write(msg.content)
 
 if prompt := st.chat_input():
-    if not openai_api_key:
-        st.info("Please add your OpenAI API key to continue.")
-        st.stop()
+    st.chat_message("human").write(prompt)
+    config = {"configurable": {"session_id": "special_key"}}
+    response = chain_with_history.invoke({"question": prompt}, config)
+    st.chat_message("ai").write(response.content)
 
-    client = OpenAI(api_key=openai_api_key)
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    st.chat_message("user").write(prompt)
-    response = client.chat.completions.create(model="gpt-3.5-turbo", messages=st.session_state.messages)
-    msg = response.choices[0].message.content
-    st.session_state.messages.append({"role": "assistant", "content": msg})
-    st.chat_message("assistant").write(msg)
+
+# Draw the messages at the end, so newly generated ones show up immediately
+with view_messages:
+    """
+    Message History initialized with:
+    ```python
+    msgs = StreamlitChatMessageHistory(key="langchain_messages")
+    ```
+
+    Contents of `st.session_state.langchain_messages`:
+    """
+    view_messages.json(st.session_state.langchain_messages)
