@@ -9,9 +9,9 @@ import boto3
 
 # AWS 인증 정보 설정
 session = boto3.Session(
-    aws_access_key_id=AKIAUBSCO44PKQQNUCZ3
-    aws_secret_access_key=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
-    region_name=us-east-1
+    aws_access_key_id="AKIAUBSCO44PKQQNUCZ3"
+    aws_secret_access_key="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"
+    region_name="us-east-1"
 )
 
 # Reference: https://python.langchain.com/docs/integrations/memory/streamlit_chat_message_history
