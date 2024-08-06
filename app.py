@@ -4,18 +4,23 @@ from langchain_community.chat_message_histories import StreamlitChatMessageHisto
 from langchain.chat_models.bedrock import BedrockChat
 # from langchain.chat_models.anthropic import ChatAnthropic
 import streamlit as st
+import os
+import boto3
 
-from dotenv import load_dotenv
-
+# AWS 인증 정보 설정
+session = boto3.Session(
+    aws_access_key_id=AKIAUBSCO44PKQQNUCZ3
+    aws_secret_access_key=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
+    region_name=us-east-1
+)
 
 # Reference: https://python.langchain.com/docs/integrations/memory/streamlit_chat_message_history
 st.title("📖 StreamlitChatMessageHistory")
 
 model_id = 'anthropic.claude-v2'
-# Load AWS Profile/credentials from .env
-load_dotenv()
 llm = BedrockChat(
     model_id=model_id,
+    session=session,
     streaming=True
 )
 
