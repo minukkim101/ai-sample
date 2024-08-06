@@ -1,5 +1,6 @@
-langchain-community
-langchain-core
+langchain-community=0.0.13
+langchain-core==0.1.35
+langsmith==0.0.63
 langchain
 python-dotenv
 streamlit
